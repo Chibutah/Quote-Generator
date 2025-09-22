@@ -13,11 +13,16 @@ const RandomQuote = () => {
   const loadQuote = async () => {
     try {
       const response = await fetch("https://api.quotable.io/random");
+      if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setQuote(data);
       setCopied(false);
     } catch (error) {
       console.error("Failed to fetch quote:", error);
+      setQuote({
+        content: "Unable to load quote. Please check your connection.",
+        author: "System",
+      });
     }
   };
 
@@ -32,9 +37,8 @@ const RandomQuote = () => {
   }, []);
 
   return (
-    
     <div className='quote-container'>
-         <h1 className="heading">Daily Inspiration</h1>
+      <h1 className="heading">Daily Inspiration</h1>
       <div className="quote">{quote.content}</div>
       <div>
         <div className="line"></div>
